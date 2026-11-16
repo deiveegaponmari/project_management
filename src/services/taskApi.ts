@@ -1,4 +1,6 @@
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.PROD
+  ? 'https://backend-project-management-bix8.onrender.com/api'
+  : 'http://localhost:5000/api';
 
 const parseJson = async (response: Response) => {
   const text = await response.text();
