@@ -96,36 +96,51 @@ const [taskDueDate, setTaskDueDate] = useState('');
   return (
     <div className="app-shell">
       <header className="topbar">
-        <div>
-          <p className="eyebrow">Project Workspace</p>
-          <h1>TaskFlow Manager</h1>
+        <div className="workspace-heading">
+          <div className="workspace-mark" aria-hidden="true">T</div>
+          <div>
+            <p className="eyebrow">Project workspace</p>
+            <h1>TaskFlow Manager</h1>
+            <p className="workspace-caption">Plan clearly. Keep your team moving.</p>
+          </div>
         </div>
         <div className="topbar-actions">
-          <button className="secondary-btn" type="button" onClick={handleLogout}>Logout</button>
+          <span className="workspace-label">Workspace overview</span>
+          <button className="secondary-btn" type="button" onClick={handleLogout}>Log out</button>
         </div>
       </header>
 
       <section className="summary-cards">
-        <div className="card">
-          <span>Total Tasks</span>
+        <div className="card metric-card metric-total">
+          <span className="metric-label">Total tasks</span>
           <strong>{tasks.length}</strong>
+          <span className="metric-note">Across your workspace</span>
         </div>
-        <div className="card">
-          <span>In Progress</span>
+        <div className="card metric-card metric-progress">
+          <span className="metric-label">In progress</span>
           <strong>{tasks.filter((task) => task.status === 'in-progress').length}</strong>
+          <span className="metric-note">Work currently moving</span>
         </div>
-        <div className="card">
-          <span>Review</span>
+        <div className="card metric-card metric-review">
+          <span className="metric-label">In review</span>
           <strong>{tasks.filter((task) => task.status === 'review').length}</strong>
+          <span className="metric-note">Ready for a closer look</span>
         </div>
-        <div className="card">
-          <span>Completed</span>
+        <div className="card metric-card metric-complete">
+          <span className="metric-label">Completed</span>
           <strong>{tasks.filter((task) => task.status === 'done').length}</strong>
+          <span className="metric-note">Finished tasks</span>
         </div>
       </section>
 
       <section className="task-form panel">
-        <h2>Create task</h2>
+        <div className="section-heading">
+          <div>
+            <p className="section-kicker">Make progress</p>
+            <h2>Create a task</h2>
+          </div>
+          <p className="section-hint">Add the details now; update the status as work moves forward.</p>
+        </div>
       {/*   <div className="task-form-grid">
           <input value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} placeholder="Task title" />
           <input value={taskAssignee} onChange={(e) => setTaskAssignee(e.target.value)} placeholder="Assignee" />
@@ -201,30 +216,45 @@ const [taskDueDate, setTaskDueDate] = useState('');
     <option value="done">Done</option>
   </select>
 <textarea value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)} placeholder="Task description" />
-        <button type="button" className="primary-btn" onClick={handleCreateTask}>Create task</button>
+      <button type="button" className="primary-btn task-create-button" onClick={handleCreateTask}>Create task</button>
 </div>
         
       </section>
 
-      <main className="content-grid">
-        <section className="panel">
+    <main className="dashboard-content">
+      <section className="panel board-panel">
           <div className="panel-header">
-            <h2>Kanban Board</h2>
+          <div>
+            <p className="section-kicker">At a glance</p>
+            <h2>Project board</h2>
+          </div>
+          <span className="panel-count">{tasks.length} {tasks.length === 1 ? 'task' : 'tasks'}</span>
           </div>
           <KanbanBoard tasks={tasks} setSelectedTask={setSelectedTask} onRefresh={ensureTasksLoaded} />
         </section>
 
-        <section className="panel">
+      <div className="lower-panels">
+        <section className="panel backlog-panel">
           <div className="panel-header">
-            <h2>Backlog</h2>
+            <div>
+              <p className="section-kicker">Task list</p>
+              <h2>All tasks</h2>
+            </div>
           </div>
           <BacklogTable tasks={tasks} setSelectedTask={setSelectedTask} />
         </section>
-      </main>
 
-      <section className="panel task-details-panel">
-        <TaskDetailsPanel task={selectedTask} onRefresh={ensureTasksLoaded} />
-      </section>
+        <section className="panel task-details-panel">
+          <div className="panel-header">
+            <div>
+              <p className="section-kicker">Keep things moving</p>
+              <h2>Task details</h2>
+            </div>
+          </div>
+          <TaskDetailsPanel task={selectedTask} onRefresh={ensureTasksLoaded} />
+        </section>
+      </div>
+      </main>
 
       {loading && <div className="loading-indicator">Loading tasks...</div>}
     </div>
